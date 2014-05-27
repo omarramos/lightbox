@@ -54,13 +54,12 @@ EkkoLightbox = ( element, options ) ->
 		@modal_shown()
 		@options.onShown.call(@)
 	.on('hide.bs.modal', @options.onHide.bind(@))
-	.on 'hidden.bs.modal', =>
+	.on('hidden.bs.modal', =>
 		if @gallery
 			$(document).off 'keydown.ekkoLightbox'
 		@modal.remove()
-		@options.onHidden.call(@)
-	.modal 'show', options
-
+		@options.onHidden.call(@))
+	@preloadImage(@options.remote, true)
 	@modal
 
 EkkoLightbox.prototype = {
@@ -225,6 +224,7 @@ EkkoLightbox.prototype = {
 				if @modal_arrows #show the arrows
 					@modal_arrows.css 'display', 'block'
 				@resize img.width
+				@modal.modal 'show', @options
 			img.onerror = =>
 				@error 'Failed to load image: ' + src
 
